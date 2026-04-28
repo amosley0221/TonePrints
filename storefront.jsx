@@ -87,7 +87,7 @@ function Footer({ route }) {
         </div>
         <div className="footer-bottom">
           <span>© 2026 TonePrints — printed with care</span>
-          <span>Brooklyn, NY · Est. 2023</span>
+          <span>Charlotte, NC · Est. 2026</span>
         </div>
       </div>
     </footer>
