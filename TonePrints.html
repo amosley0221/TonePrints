@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TonePrints — Picture books & photo prints, made with care</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="storefront.jsx"></script>
+<script type="text/babel" src="cart-checkout.jsx"></script>
+<script type="text/babel" src="admin.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+const { useState, useEffect, useCallback } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "homeStyle": "cozy",
+  "accent": "#7B9A6E"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [route, setRoute] = useState('home');
+  const [cart, setCart] = useState([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [quickView, setQuickView] = useState(null);
+  const [adminRoute, setAdminRoute] = useState('dash');
+  const [editorOpen, setEditorOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [orderDetailOpen, setOrderDetailOpen] = useState(false);
+  const [openOrderObj, setOpenOrderObj] = useState(null);
+  const [toasts, setToasts] = useState([]);
+
+  const navigate = useCallback((r) => {
+    setRoute(r);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
+
+  const addToast = useCallback((msg) => {
+    const id = Math.random().toString(36).slice(2);
+    setToasts(t => [...t, { id, msg }]);
+    setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), 2800);
+  }, []);
+
+  const addToCart = useCallback((item) => {
+    setCart((prev) => {
+      const idx = prev.findIndex(x => x.id === item.id && x.size === item.size);
+      if (idx >= 0) return prev.map((it, i) => i === idx ? { ...it, qty: it.qty + (item.qty || 1) } : it);
+      return [...prev, item];
+    });
+    setCartOpen(true);
+    addToast(`Added · ${item.title}`);
+  }, [addToast]);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--sage', t.accent);
+  }, [t.accent]);
+
+  const cartCount = cart.reduce((s, it) => s + it.qty, 0);
+
+  let page;
+  if (route === 'home') {
+    if (t.homeStyle === 'storybook') page = <HomeStorybook navigate={navigate} onQuickView={setQuickView}/>;
+    else if (t.homeStyle === 'cozy') page = <HomeCozy navigate={navigate} onQuickView={setQuickView}/>;
+    else page = <HomeStadium navigate={navigate} onQuickView={setQuickView}/>;
+  } else if (route === 'shop') page = <ShopPage navigate={navigate} onQuickView={setQuickView}/>;
+  else if (route === 'collections') page = <CollectionsPage navigate={navigate} onQuickView={setQuickView}/>;
+  else if (route === 'about') page = <AboutPage navigate={navigate}/>;
+  else if (route.startsWith('product:')) page = <ProductDetail id={route.split(':')[1]} navigate={navigate} addToCart={addToCart}/>;
+  else if (route === 'checkout') page = <CheckoutPage cart={cart} setCart={setCart} navigate={navigate} addToast={addToast}/>;
+  else if (route === 'admin') {
+    return (
+      <>
+        <div className="admin">
+          <AdminSide adminRoute={adminRoute} setAdminRoute={setAdminRoute} navigate={navigate}/>
+          <main className="admin-main" key={adminRoute}>
+            {adminRoute === 'dash' && <AdminDashboard/>}
+            {adminRoute === 'products' && <AdminProducts openProduct={(p) => { setEditingProduct(p); setEditorOpen(true); }}/>}
+            {adminRoute === 'orders' && <AdminOrders openOrder={(o) => { setOpenOrderObj(o); setOrderDetailOpen(true); }}/>}
+            {adminRoute === 'customers' && <AdminCustomers/>}
+            {adminRoute === 'shipping' && <AdminShipping addToast={addToast}/>}
+            {adminRoute === 'payments' && <AdminPayments/>}
+          </main>
+        </div>
+        <ProductEditor open={editorOpen} product={editingProduct} onClose={() => setEditorOpen(false)} addToast={addToast}/>
+        <OrderDetail open={orderDetailOpen} order={openOrderObj} onClose={() => setOrderDetailOpen(false)} addToast={addToast}/>
+        <ToastStack toasts={toasts}/>
+        <TweaksPanelInline t={t} setTweak={setTweak}/>
+      </>
+    );
+  }
+
+  return (
+    <div className="app">
+      <TopBar route={route} navigate={navigate} cartCount={cartCount} onOpenCart={() => setCartOpen(true)}/>
+      <div className="page-stage" key={route}>{page}</div>
+      <Footer route={route}/>
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} cart={cart} setCart={setCart} navigate={navigate}/>
+      <QuickView product={quickView} onClose={() => setQuickView(null)} addToCart={addToCart} navigate={navigate}/>
+      <ToastStack toasts={toasts}/>
+      <TweaksPanelInline t={t} setTweak={setTweak}/>
+    </div>
+  );
+}
+
+function ToastStack({ toasts }) {
+  return (
+    <div className="toast-stack">
+      {toasts.map(t => (
+        <div key={t.id} className="toast">
+          <span style={{ width: 16, height: 16, borderRadius: '50%', background: 'var(--sage)', color: 'var(--paper)', display: 'grid', placeItems: 'center', fontSize: 10 }}>✓</span>
+          {t.msg}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TweaksPanelInline({ t, setTweak }) {
+  return (
+    <TweaksPanel title="TonePrints · Tweaks">
+      <TweakSection label="Storefront"/>
+      <TweakRadio label="Home layout" value={t.homeStyle}
+        options={[
+          { value: 'stadium', label: 'Stadium' },
+          { value: 'storybook', label: 'Storybook' },
+          { value: 'cozy', label: 'Cozy split' }
+        ]}
+        onChange={(v) => setTweak('homeStyle', v)}/>
+      <TweakSection label="Theme"/>
+      <TweakColor label="Accent (sage)" value={t.accent}
+        onChange={(v) => setTweak('accent', v)}/>
+    </TweaksPanel>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
