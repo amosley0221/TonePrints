@@ -363,21 +363,21 @@ function HomeCozy({ navigate, onQuickView }) {
           </h1>
         </section>
 
-        <section style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 32, marginTop: 48 }}>
-          <div style={{ background: 'var(--sage-pale)', borderRadius: 'var(--radius-xl)', padding: 40 }}>
+        <section className="cozy-split" style={{ marginTop: 48 }}>
+          <div className="cozy-card cozy-card-sage">
             <span className="eyebrow">Picture books</span>
-            <h2 className="font-display" style={{ fontSize: 44, fontWeight: 400, letterSpacing: '-0.02em', marginTop: 10, marginBottom: 24 }}>For little readers.</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+            <h2 className="font-display cozy-card-h2">For little readers.</h2>
+            <div className="cozy-card-grid">
               {books.map((p, i) => (
                 <ProductCard key={p.id} p={p} navigate={navigate} onQuickView={onQuickView} idx={i}/>
               ))}
             </div>
             <button className="btn btn-sage" onClick={() => navigate('shop')} style={{ marginTop: 28 }}>All books <span className="arrow">→</span></button>
           </div>
-          <div style={{ background: 'var(--butter-soft)', borderRadius: 'var(--radius-xl)', padding: 40 }}>
+          <div className="cozy-card cozy-card-butter">
             <span className="eyebrow">Photo prints</span>
-            <h2 className="font-display" style={{ fontSize: 44, fontWeight: 400, letterSpacing: '-0.02em', marginTop: 10, marginBottom: 24 }}>For warm walls.</h2>
-            <div style={{ display: 'grid', gap: 20 }}>
+            <h2 className="font-display cozy-card-h2">For warm walls.</h2>
+            <div className="cozy-card-grid cozy-card-grid-1col">
               {prints.slice(0, 2).map((p, i) => (
                 <ProductCard key={p.id} p={p} navigate={navigate} onQuickView={onQuickView} idx={i}/>
               ))}
