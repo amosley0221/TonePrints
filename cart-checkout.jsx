@@ -106,7 +106,7 @@ function QuickView({ product, onClose, addToCart, navigate }) {
           <h2 className="font-display" style={{ fontSize: 40, fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1.05, margin: '8px 0 12px' }}>{product.title}</h2>
           <div style={{ fontSize: 22, fontWeight: 700 }}>${sizePrice(size)}.00</div>
           <p style={{ marginTop: 20, fontSize: 14, color: 'var(--ink-soft)', lineHeight: 1.7 }}>
-            {product.sub} on {product.paper}. Made with care in our Brooklyn studio.
+            {product.sub} on {product.paper}. Made with care in our Charlotte studio.
           </p>
           <div className="eyebrow" style={{ marginTop: 24, marginBottom: 10 }}>Format</div>
           <div className="option-grid" style={{ gridTemplateColumns: `repeat(${product.sizes.length}, 1fr)` }}>
@@ -201,11 +201,11 @@ function CheckoutPage({ cart, setCart, navigate, addToast }) {
                 <div className="field"><span className="field-lbl">Last name</span><input defaultValue="Yamasaki"/></div>
               </div>
               <div className="field" style={{ marginBottom: 16 }}>
-                <span className="field-lbl">Street address</span><input defaultValue="123 Hudson Ave"/>
+                <span className="field-lbl">Street address</span><input defaultValue="123 N Tryon St"/>
               </div>
               <div className="field-row cols-3">
-                <div className="field"><span className="field-lbl">City</span><input defaultValue="Brooklyn"/></div>
-                <div className="field"><span className="field-lbl">Postal</span><input defaultValue="11201"/></div>
+                <div className="field"><span className="field-lbl">City</span><input defaultValue="Charlotte"/></div>
+                <div className="field"><span className="field-lbl">Postal</span><input defaultValue="28202"/></div>
                 <div className="field"><span className="field-lbl">Country</span>
                   <select defaultValue="US">
                     <option value="US">United States</option>

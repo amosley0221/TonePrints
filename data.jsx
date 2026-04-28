@@ -228,10 +228,10 @@ const ORDERS = [
 ];
 
 const CUSTOMERS = [
-  { name: 'Maya Yamasaki', email: 'maya@hey.com', orders: 4, spent: 248.00, location: 'Brooklyn, NY', joined: '2024-11' },
+  { name: 'Maya Yamasaki', email: 'maya@hey.com', orders: 4, spent: 248.00, location: 'Charlotte, NC', joined: '2024-11' },
   { name: 'Adesola Folarin', email: 'adesola@kindred.studio', orders: 7, spent: 612.50, location: 'London, UK', joined: '2024-03' },
   { name: 'Jonas Bergmann', email: 'jb@bergmann.co', orders: 2, spent: 86.00, location: 'Berlin, DE', joined: '2025-08' },
-  { name: 'Sade Okafor', email: 'sade@thirdroom.io', orders: 5, spent: 312.00, location: 'Brooklyn, US', joined: '2024-07' },
+  { name: 'Sade Okafor', email: 'sade@thirdroom.io', orders: 5, spent: 312.00, location: 'Charlotte, NC', joined: '2024-07' },
   { name: 'Leo Costa', email: 'leo@costa.fm', orders: 12, spent: 940.00, location: 'Lisbon, PT', joined: '2023-09' },
   { name: 'Noora Aaltonen', email: 'noora@hey.fi', orders: 3, spent: 124.00, location: 'Helsinki, FI', joined: '2025-02' },
   { name: 'Rosa Eriksson', email: 'rosa@eriksson.se', orders: 1, spent: 24.00, location: 'Stockholm, SE', joined: '2026-01' },

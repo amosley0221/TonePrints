@@ -522,7 +522,7 @@ function OrderDetail({ open, order, onClose, addToast }) {
               <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, marginTop: 8, fontWeight: 400 }}>{order.customer}</div>
               <div style={{ fontSize: 12, color: 'var(--mute)', marginTop: 4 }}>{order.email}</div>
               <div style={{ marginTop: 16, fontSize: 13, lineHeight: 1.6 }}>
-                123 Hudson Ave<br/>Brooklyn, NY 11201<br/>United States
+                123 N Tryon St<br/>Charlotte, NC 28202<br/>United States
               </div>
             </div>
             <div className="admin-card">
@@ -780,8 +780,8 @@ function AdminPayments() {
           <span className="font-mono" style={{ fontSize: 13 }}>EIN 88-1234567</span>
         </div>
         <div className="setting-row">
-          <div><h4>Default rate (NY)</h4><p>Sales tax rate applied to orders shipping within New York.</p></div>
-          <span className="font-mono" style={{ fontSize: 13 }}>8.875%</span>
+          <div><h4>Default rate (NC)</h4><p>Sales tax rate applied to orders shipping within North Carolina.</p></div>
+          <span className="font-mono" style={{ fontSize: 13 }}>7.25%</span>
         </div>
       </div>
     </div>

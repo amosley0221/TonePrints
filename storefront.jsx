@@ -241,7 +241,7 @@ function HomeStadium({ navigate, onQuickView }) {
         <div className="testimonial-grid">
           {[
             { stars: '★★★★★', text: 'My three-year-old asks for "the fox book" every single night. The illustrations are so warm and soft.', name: 'Amelia P.', loc: 'Utrecht' },
-            { stars: '★★★★★', text: 'Bought a print as a baby gift. The colors are dreamy and it arrived beautifully packaged. The new parents adored it.', name: 'David K.', loc: 'Brooklyn' },
+            { stars: '★★★★★', text: 'Bought a print as a baby gift. The colors are dreamy and it arrived beautifully packaged. The new parents adored it.', name: 'David K.', loc: 'Charlotte' },
             { stars: '★★★★★', text: 'Quality is wonderful — thick paper, lovely binding. Feels like a book that will be passed down.', name: 'Sarah M.', loc: 'Portland, OR' },
           ].map((t, i) => (
             <div key={i} className="testimonial">
@@ -312,7 +312,7 @@ function HomeStorybook({ navigate, onQuickView }) {
               <span className="text-reveal"><span style={{ animationDelay: '0.24s', fontStyle: 'italic', color: 'var(--sage-deep)' }}>page.</span></span>
             </h1>
             <p style={{ marginTop: 24, fontSize: 17, color: 'var(--ink-soft)', maxWidth: '38ch' }}>
-              Hand-illustrated picture books and warm photo prints, made in our Brooklyn studio.
+              Hand-illustrated picture books and warm photo prints, made in our Charlotte studio.
             </p>
             <div className="hero-actions">
               <button className="btn btn-primary" onClick={() => navigate('shop')}>Shop everything <span className="arrow">→</span></button>
@@ -416,7 +416,7 @@ function ShopPage({ navigate, onQuickView }) {
               <span className="text-reveal"><span style={{ animationDelay: '0.1s', fontStyle: 'italic', color: 'var(--sage-deep)' }}>shop.</span></span>
             </h1>
           </div>
-          <p>Picture books, chapter books, and photo prints from our Brooklyn studio. New work added on the first Friday of each month.</p>
+          <p>Picture books, chapter books, and photo prints from our Charlotte studio. New work added on the first Friday of each month.</p>
         </section>
 
         <div className="filter-bar">
@@ -526,7 +526,7 @@ function ProductDetail({ id, navigate, addToCart }) {
               <li><dt>Format</dt><dd>{p.edition}</dd></li>
               <li><dt>Paper</dt><dd>{p.paper}</dd></li>
               <li><dt>Year</dt><dd>{p.year}</dd></li>
-              <li><dt>Made in</dt><dd>Brooklyn, NY</dd></li>
+              <li><dt>Made in</dt><dd>Charlotte, NC</dd></li>
               <li><dt>Shipping</dt><dd>{isPrint ? 'Flat in protective sleeve · 3–8 days' : 'Sturdy mailer · 3–8 days'}</dd></li>
             </ul>
           </div>
@@ -588,7 +588,7 @@ function AboutPage({ navigate }) {
     <div className="page">
       <div className="container">
         <section className="about-hero">
-          <span className="eyebrow">Studio note · est. 2023</span>
+          <span className="eyebrow">Studio note · est. 2026</span>
           <h1 style={{ marginTop: 24 }}>
             <span className="text-reveal"><span>A small studio</span></span><br/>
             <span className="text-reveal"><span style={{ animationDelay: '0.12s', fontStyle: 'italic', color: 'var(--sage-deep)' }}>making warm</span></span><br/>
@@ -603,7 +603,7 @@ function AboutPage({ navigate }) {
         <section className="about-cols">
           <div>
             <span className="eyebrow">The work</span>
-            <p style={{ marginTop: 16 }}>TonePrints is a small studio based in Brooklyn, making picture books for small readers and photo prints for the homes that hold them. We work with a handful of illustrators and photographers, mostly local, mostly friends.</p>
+            <p style={{ marginTop: 16 }}>TonePrints is a small studio based in Charlotte, making picture books for small readers and photo prints for the homes that hold them. We work with a handful of illustrators and photographers, mostly local, mostly friends.</p>
             <p>Each new title is announced on the first Friday of the month. We print in small runs and ship from our studio, usually within a day.</p>
           </div>
           <div>
