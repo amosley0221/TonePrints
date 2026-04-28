@@ -1318,6 +1318,33 @@ img { display: block; max-width: 100%; }
 }
 .account-admin-link:hover { color: var(--sage); }
 
+.account-modal-admin .account-modal-title em { color: var(--ink); }
+.account-modal-tag {
+  display: block;
+  text-align: center;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 4px 12px;
+  border-radius: 999px;
+  width: fit-content;
+  margin: 0 auto 12px;
+}
+.account-error {
+  background: #F2D8D4; color: #8A4339;
+  font-size: 13px; font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 12px;
+  text-align: center;
+}
+.account-hint {
+  font-size: 12px; color: var(--mute);
+  text-align: center;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+}
+
 /* ─── Account page ────────────────────────────────────────────── */
 .account-hero {
   padding: 56px 0 24px;

@@ -643,18 +643,26 @@ function AboutPage({ navigate }) {
 }
 
 // ─── Account: sign-in modal ──────────────────────────────────────────────
-function AccountModal({ open, onClose, onSignIn, onAdmin }) {
+function AccountModal({ open, onClose, onSignIn, onAdmin, adminHint }) {
   const [mode, setMode] = useState('signin');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!open) { setEmail(''); setPassword(''); setName(''); setMode('signin'); }
+    if (!open) { setEmail(''); setPassword(''); setName(''); setMode('signin'); setError(''); }
   }, [open]);
+
+  useEffect(() => { setError(''); }, [mode]);
 
   const submit = (e) => {
     e.preventDefault();
+    if (mode === 'admin') {
+      const ok = onAdmin({ email, password });
+      if (!ok) setError('Incorrect admin email or password.');
+      return;
+    }
     onSignIn({
       name: name || 'Maya Yamasaki',
       email: email || 'maya@hey.com',
@@ -662,23 +670,28 @@ function AccountModal({ open, onClose, onSignIn, onAdmin }) {
     });
   };
 
+  const isAdmin = mode === 'admin';
+
   return (
     <div className={`modal-backdrop ${open ? 'open' : ''}`} onClick={onClose}>
-      <div className="account-modal" onClick={(e) => e.stopPropagation()}>
+      <div className={`account-modal ${isAdmin ? 'account-modal-admin' : ''}`} onClick={(e) => e.stopPropagation()}>
         <button className="icon-btn account-close" onClick={onClose} aria-label="Close">
           <svg width="14" height="14" viewBox="0 0 14 14"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.4"/></svg>
         </button>
         <div className="account-modal-body">
           <div className="account-modal-mark">
-            <span className="brand-mark" style={{ width: 40, height: 40, fontSize: 18 }}>t</span>
+            <span className="brand-mark" style={{ width: 40, height: 40, fontSize: 18, background: isAdmin ? 'var(--ink)' : 'var(--sage)' }}>{isAdmin ? '◆' : 't'}</span>
           </div>
+          {isAdmin && <div className="account-modal-tag">Studio admin</div>}
           <h2 className="font-display account-modal-title">
-            {mode === 'signin' ? 'Welcome back' : 'Create account'}
+            {mode === 'signin' && 'Welcome back'}
+            {mode === 'signup' && 'Create account'}
+            {mode === 'admin' && 'Studio sign in'}
           </h2>
           <p className="account-modal-sub">
-            {mode === 'signin'
-              ? 'Sign in to view orders, addresses, and saved payment.'
-              : 'A few details and you’re set.'}
+            {mode === 'signin' && 'Sign in to view orders, addresses, and saved payment.'}
+            {mode === 'signup' && 'A few details and you’re set.'}
+            {mode === 'admin' && 'Authorized staff only. Enter your admin credentials to manage the store.'}
           </p>
           <form onSubmit={submit} className="account-form">
             {mode === 'signup' && (
@@ -686,26 +699,43 @@ function AccountModal({ open, onClose, onSignIn, onAdmin }) {
                 <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required/>
               </div>
             )}
-            <div className="field"><span className="field-lbl">Email</span>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" required/>
+            <div className="field"><span className="field-lbl">{isAdmin ? 'Admin email' : 'Email'}</span>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={isAdmin ? 'studio@toneprints.com' : 'you@email.com'} required autoFocus={isAdmin}/>
             </div>
-            <div className="field"><span className="field-lbl">Password</span>
+            <div className="field"><span className="field-lbl">{isAdmin ? 'Admin password' : 'Password'}</span>
               <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required/>
             </div>
-            {mode === 'signin' && (
+            {!isAdmin && mode === 'signin' && (
               <a className="account-forgot">Forgot password?</a>
             )}
-            <button type="submit" className="btn btn-sage btn-block">
-              {mode === 'signin' ? 'Sign in →' : 'Create account →'}
+            {error && <div className="account-error">{error}</div>}
+            <button type="submit" className={`btn btn-block ${isAdmin ? 'btn-primary' : 'btn-sage'}`}>
+              {mode === 'signin' && 'Sign in →'}
+              {mode === 'signup' && 'Create account →'}
+              {mode === 'admin' && 'Sign in to admin →'}
             </button>
+            {isAdmin && adminHint && (
+              <p className="account-hint">{adminHint}</p>
+            )}
           </form>
-          <div className="account-or"><span/>OR<span/></div>
-          <button className="btn btn-ghost btn-block" onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}>
-            {mode === 'signin' ? 'New here? Create an account' : 'Already have an account? Sign in'}
-          </button>
-          <div className="account-admin-row">
-            <button onClick={onAdmin} className="account-admin-link">Studio admin sign in →</button>
-          </div>
+
+          {!isAdmin && (
+            <>
+              <div className="account-or"><span/>OR<span/></div>
+              <button className="btn btn-ghost btn-block" onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}>
+                {mode === 'signin' ? 'New here? Create an account' : 'Already have an account? Sign in'}
+              </button>
+              <div className="account-admin-row">
+                <button onClick={() => setMode('admin')} className="account-admin-link">Studio admin sign in →</button>
+              </div>
+            </>
+          )}
+
+          {isAdmin && (
+            <div className="account-admin-row">
+              <button onClick={() => setMode('signin')} className="account-admin-link">← Back to customer sign in</button>
+            </div>
+          )}
         </div>
       </div>
     </div>

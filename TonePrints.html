@@ -29,6 +29,16 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "accent": "#7B9A6E"
 }/*EDITMODE-END*/;
 
+// ─── Admin credentials ─────────────────────────────────────────
+// Change these to your own email + password before going live.
+// (Prototype only — for real auth, move this server-side.)
+const ADMIN_CREDENTIALS = {
+  email: 'studio@toneprints.com',
+  password: 'studio2026',
+};
+// Set to a string to show a hint under the admin form, or '' to hide.
+const ADMIN_HINT = 'Demo password: studio2026';
+
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [route, setRoute] = useState('home');
@@ -135,8 +145,18 @@ function App() {
       <AccountModal
         open={accountOpen}
         onClose={() => setAccountOpen(false)}
+        adminHint={ADMIN_HINT}
         onSignIn={(c) => { setCustomer(c); setAccountOpen(false); navigate('account'); addToast(`Signed in · ${c.name.split(' ')[0]}`); }}
-        onAdmin={() => { setAccountOpen(false); navigate('admin'); }}
+        onAdmin={({ email, password }) => {
+          if (email.trim().toLowerCase() === ADMIN_CREDENTIALS.email.toLowerCase()
+              && password === ADMIN_CREDENTIALS.password) {
+            setAccountOpen(false);
+            navigate('admin');
+            addToast('Welcome back, Studio');
+            return true;
+          }
+          return false;
+        }}
       />
       <ToastStack toasts={toasts}/>
       <TweaksPanelInline t={t} setTweak={setTweak}/>
