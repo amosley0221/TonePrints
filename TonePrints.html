@@ -41,6 +41,8 @@ function App() {
   const [orderDetailOpen, setOrderDetailOpen] = useState(false);
   const [openOrderObj, setOpenOrderObj] = useState(null);
   const [toasts, setToasts] = useState([]);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [customer, setCustomer] = useState(null);
 
   const navigate = useCallback((r) => {
     setRoute(r);
@@ -79,6 +81,21 @@ function App() {
   else if (route === 'about') page = <AboutPage navigate={navigate}/>;
   else if (route.startsWith('product:')) page = <ProductDetail id={route.split(':')[1]} navigate={navigate} addToCart={addToCart}/>;
   else if (route === 'checkout') page = <CheckoutPage cart={cart} setCart={setCart} navigate={navigate} addToast={addToast}/>;
+  else if (route === 'account') {
+    if (!customer) {
+      page = (
+        <div className="page" style={{ minHeight: '60vh', display: 'grid', placeItems: 'center', padding: '60px 20px' }}>
+          <div style={{ textAlign: 'center', maxWidth: 380 }}>
+            <h2 className="font-display" style={{ fontSize: 32, fontWeight: 500, marginBottom: 8 }}>Sign in to your account</h2>
+            <p style={{ color: 'var(--ink-soft)', marginBottom: 20 }}>View your orders, addresses, and saved payment.</p>
+            <button className="btn btn-sage" onClick={() => setAccountOpen(true)}>Sign in →</button>
+          </div>
+        </div>
+      );
+    } else {
+      page = <CustomerAccount navigate={navigate} customer={customer} cart={cart} onSignOut={() => { setCustomer(null); navigate('home'); addToast('Signed out'); }}/>;
+    }
+  }
   else if (route === 'admin') {
     return (
       <>
@@ -103,11 +120,24 @@ function App() {
 
   return (
     <div className="app">
-      <TopBar route={route} navigate={navigate} cartCount={cartCount} onOpenCart={() => setCartOpen(true)}/>
+      <TopBar
+        route={route}
+        navigate={navigate}
+        cartCount={cartCount}
+        onOpenCart={() => setCartOpen(true)}
+        onOpenAccount={() => setAccountOpen(true)}
+        customer={customer}
+      />
       <div className="page-stage" key={route}>{page}</div>
       <Footer route={route}/>
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} cart={cart} setCart={setCart} navigate={navigate}/>
       <QuickView product={quickView} onClose={() => setQuickView(null)} addToCart={addToCart} navigate={navigate}/>
+      <AccountModal
+        open={accountOpen}
+        onClose={() => setAccountOpen(false)}
+        onSignIn={(c) => { setCustomer(c); setAccountOpen(false); navigate('account'); addToast(`Signed in · ${c.name.split(' ')[0]}`); }}
+        onAdmin={() => { setAccountOpen(false); navigate('admin'); }}
+      />
       <ToastStack toasts={toasts}/>
       <TweaksPanelInline t={t} setTweak={setTweak}/>
     </div>

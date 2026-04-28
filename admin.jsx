@@ -26,6 +26,10 @@ function AdminSide({ adminRoute, setAdminRoute, navigate }) {
         <span>TonePrints<br/><small>Studio admin</small></span>
       </div>
       <nav className="admin-nav">
+        <a className="admin-back" onClick={() => navigate('home')}>
+          <svg viewBox="0 0 16 16" fill="none" width="14" height="14" style={{ flexShrink: 0 }}><path d="M10 3l-5 5 5 5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <span>Back to store</span>
+        </a>
         <div className="admin-nav-section" style={{ paddingTop: 0 }}>Studio</div>
         {item('dash', 'Dashboard', ic.dash)}
         {item('orders', 'Orders', ic.ord)}
@@ -94,7 +98,7 @@ function AdminDashboard() {
         ))}
       </div>
 
-      <div className="admin-grid" style={{ gridTemplateColumns: '2fr 1fr' }}>
+      <div className="admin-grid admin-grid-2-1">
         <div className="admin-card">
           <div className="admin-card-head">
             <div>
@@ -151,21 +155,23 @@ function AdminDashboard() {
           <h3>Recent orders</h3>
           <button className="filter-pill">View all →</button>
         </div>
-        <table className="table">
-          <thead><tr><th>Order</th><th>Customer</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>
-          <tbody>
-            {ORDERS.slice(0, 5).map(o => (
-              <tr key={o.id}>
-                <td className="font-mono">{o.id}</td>
-                <td>{o.customer}</td>
-                <td className="font-mono" style={{ fontSize: 12, color: 'var(--mute)' }}>{o.date}</td>
-                <td>{o.items}</td>
-                <td className="font-mono">${o.total.toFixed(2)}</td>
-                <td><span className={`status-pill status-${o.status}`}>{o.status}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="table-wrap" style={{ border: 0 }}>
+          <table className="table">
+            <thead><tr><th>Order</th><th>Customer</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>
+            <tbody>
+              {ORDERS.slice(0, 5).map(o => (
+                <tr key={o.id}>
+                  <td className="font-mono">{o.id}</td>
+                  <td>{o.customer}</td>
+                  <td className="font-mono" style={{ fontSize: 12, color: 'var(--mute)' }}>{o.date}</td>
+                  <td>{o.items}</td>
+                  <td className="font-mono">${o.total.toFixed(2)}</td>
+                  <td><span className={`status-pill status-${o.status}`}>{o.status}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
@@ -516,7 +522,7 @@ function OrderDetail({ open, order, onClose, addToast }) {
         </div>
 
         <div className="slideover-body">
-          <div className="admin-grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 24 }}>
+          <div className="admin-grid">
             <div className="admin-card">
               <span className="eyebrow">Customer</span>
               <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, marginTop: 8, fontWeight: 400 }}>{order.customer}</div>
@@ -616,7 +622,7 @@ function AdminCustomers() {
         </div>
       </div>
 
-      <div className="stat-grid stagger" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+      <div className="stat-grid stat-grid-3 stagger">
         <div className="stat-card"><span className="stat-card-label">Total customers</span><span className="stat-card-value">{CUSTOMERS.length}</span><span className="stat-card-delta up">↑ +3 this month</span></div>
         <div className="stat-card"><span className="stat-card-label">Repeat rate</span><span className="stat-card-value">62%</span><span className="stat-card-delta up">↑ +4 pt</span></div>
         <div className="stat-card"><span className="stat-card-label">Avg. lifetime value</span><span className="stat-card-value">$1,540</span><span className="stat-card-delta up">↑ +$120</span></div>

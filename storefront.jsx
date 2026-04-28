@@ -3,9 +3,9 @@
 const { useState, useEffect, useRef, useMemo } = React;
 
 // ─── Top bar ─────────────────────────────────────────────────────────────
-function TopBar({ route, navigate, cartCount, onOpenCart }) {
+function TopBar({ route, navigate, cartCount, onOpenCart, onOpenAccount, customer }) {
   if (route.startsWith('admin')) return null;
-  const isActive = (r) => route === r || (r === 'shop' && route.startsWith('product'));
+  const isActive = (r) => route === r || (r === 'shop' && route.startsWith('product')) || (r === 'account' && route === 'account');
   return (
     <header className="topbar">
       <div className="topbar-inner">
@@ -25,11 +25,22 @@ function TopBar({ route, navigate, cartCount, onOpenCart }) {
               <line x1="12.5" y1="12.5" x2="16" y2="16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
           </button>
-          <button className="icon-btn" title="Account" aria-label="Account" onClick={() => navigate('admin')}>
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <circle cx="9" cy="6.5" r="3" stroke="currentColor" strokeWidth="1.5"/>
-              <path d="M3 16c.7-3 3.2-4.5 6-4.5s5.3 1.5 6 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
+          <button
+            className={`icon-btn ${isActive('account') ? 'active' : ''}`}
+            title={customer ? 'Your account' : 'Sign in'}
+            aria-label="Account"
+            onClick={() => customer ? navigate('account') : onOpenAccount()}
+          >
+            {customer ? (
+              <span className="avatar avatar-sm" aria-hidden="true">
+                {customer.name.split(' ').map(s => s[0]).join('').slice(0, 2)}
+              </span>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <circle cx="9" cy="6.5" r="3" stroke="currentColor" strokeWidth="1.5"/>
+                <path d="M3 16c.7-3 3.2-4.5 6-4.5s5.3 1.5 6 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            )}
           </button>
           <button className="icon-btn" title="Cart" aria-label="Cart" onClick={onOpenCart}>
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -631,8 +642,247 @@ function AboutPage({ navigate }) {
   );
 }
 
+// ─── Account: sign-in modal ──────────────────────────────────────────────
+function AccountModal({ open, onClose, onSignIn, onAdmin }) {
+  const [mode, setMode] = useState('signin');
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (!open) { setEmail(''); setPassword(''); setName(''); setMode('signin'); }
+  }, [open]);
+
+  const submit = (e) => {
+    e.preventDefault();
+    onSignIn({
+      name: name || 'Maya Yamasaki',
+      email: email || 'maya@hey.com',
+      joined: 'November 2024',
+    });
+  };
+
+  return (
+    <div className={`modal-backdrop ${open ? 'open' : ''}`} onClick={onClose}>
+      <div className="account-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="icon-btn account-close" onClick={onClose} aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 14 14"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.4"/></svg>
+        </button>
+        <div className="account-modal-body">
+          <div className="account-modal-mark">
+            <span className="brand-mark" style={{ width: 40, height: 40, fontSize: 18 }}>t</span>
+          </div>
+          <h2 className="font-display account-modal-title">
+            {mode === 'signin' ? 'Welcome back' : 'Create account'}
+          </h2>
+          <p className="account-modal-sub">
+            {mode === 'signin'
+              ? 'Sign in to view orders, addresses, and saved payment.'
+              : 'A few details and you’re set.'}
+          </p>
+          <form onSubmit={submit} className="account-form">
+            {mode === 'signup' && (
+              <div className="field"><span className="field-lbl">Name</span>
+                <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required/>
+              </div>
+            )}
+            <div className="field"><span className="field-lbl">Email</span>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" required/>
+            </div>
+            <div className="field"><span className="field-lbl">Password</span>
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required/>
+            </div>
+            {mode === 'signin' && (
+              <a className="account-forgot">Forgot password?</a>
+            )}
+            <button type="submit" className="btn btn-sage btn-block">
+              {mode === 'signin' ? 'Sign in →' : 'Create account →'}
+            </button>
+          </form>
+          <div className="account-or"><span/>OR<span/></div>
+          <button className="btn btn-ghost btn-block" onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}>
+            {mode === 'signin' ? 'New here? Create an account' : 'Already have an account? Sign in'}
+          </button>
+          <div className="account-admin-row">
+            <button onClick={onAdmin} className="account-admin-link">Studio admin sign in →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Customer account page ───────────────────────────────────────────────
+function CustomerAccount({ navigate, customer, cart, onSignOut }) {
+  const [tab, setTab] = useState('orders');
+  const myOrders = useMemo(() => {
+    const owned = ORDERS.filter(o => o.email === customer.email);
+    return (owned.length ? owned : ORDERS.slice(0, 3)).map((o, i) => ({
+      ...o,
+      tracking: i === 0 ? null : '1Z' + (5000 + i) + 'TP' + (200 + i),
+    }));
+  }, [customer.email]);
+
+  const wishlist = PRODUCTS.slice(2, 5);
+  const cartCount = cart.reduce((s, it) => s + it.qty, 0);
+
+  return (
+    <div className="page">
+      <div className="container">
+        <section className="account-hero">
+          <span className="eyebrow">Your account</span>
+          <h1 className="font-display account-title">
+            Hi, <em>{customer.name.split(' ')[0]}</em>.
+          </h1>
+          <p className="account-sub">
+            Member since {customer.joined} · {myOrders.length} orders · {cartCount} item{cartCount === 1 ? '' : 's'} in your cart
+          </p>
+          <div className="account-hero-actions">
+            <button className="btn btn-ghost" onClick={() => navigate('shop')}>← Continue shopping</button>
+            <button className="btn btn-ghost" onClick={onSignOut}>Sign out</button>
+          </div>
+        </section>
+
+        <div className="account-tabs">
+          {[
+            ['orders', 'Orders'],
+            ['cart', 'Cart'],
+            ['profile', 'Profile'],
+            ['addresses', 'Addresses'],
+            ['payment', 'Payment'],
+            ['wishlist', 'Wishlist'],
+          ].map(([id, label]) => (
+            <button key={id} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}>
+              {label}
+              {id === 'cart' && cartCount > 0 && <span className="account-tab-badge">{cartCount}</span>}
+            </button>
+          ))}
+        </div>
+
+        {tab === 'orders' && (
+          <div className="account-panel">
+            {myOrders.map((o, i) => (
+              <div key={o.id} className="account-order">
+                <div className="account-order-head">
+                  <div>
+                    <div className="font-mono account-order-id">{o.id}</div>
+                    <div className="account-order-date">Placed {o.date} · {o.items} item{o.items === 1 ? '' : 's'}</div>
+                  </div>
+                  <span className={`status-pill status-${o.status}`}>{o.status}</span>
+                </div>
+                <div className="account-order-body">
+                  <div className="account-order-line"><span>Total</span><span className="font-mono">${o.total.toFixed(2)}</span></div>
+                  <div className="account-order-line"><span>Shipping</span><span>{o.ship}</span></div>
+                  <div className="account-order-line">
+                    <span>Tracking</span>
+                    {o.tracking
+                      ? <span className="font-mono">{o.tracking}</span>
+                      : <span style={{ color: 'var(--mute)' }}>Awaiting label</span>}
+                  </div>
+                </div>
+                <div className="account-order-foot">
+                  <button className="filter-pill">View details</button>
+                  {o.status === 'shipped' && <button className="filter-pill">Track package</button>}
+                  {o.status === 'delivered' && <button className="filter-pill">Buy again</button>}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === 'cart' && (
+          <div className="account-panel">
+            {cart.length === 0 ? (
+              <div className="account-empty">
+                <p>Your cart is empty.</p>
+                <button className="btn btn-sage" onClick={() => navigate('shop')}>Browse the shop →</button>
+              </div>
+            ) : (
+              <>
+                {cart.map((it, i) => (
+                  <div key={i} className="account-cart-row">
+                    <div>
+                      <div style={{ fontWeight: 700 }}>{it.title}</div>
+                      <div style={{ fontSize: 12, color: 'var(--mute)' }}>{it.size} · qty {it.qty}</div>
+                    </div>
+                    <div className="font-mono" style={{ fontWeight: 700 }}>${(it.price * it.qty).toFixed(2)}</div>
+                  </div>
+                ))}
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
+                  <button className="btn btn-sage" onClick={() => navigate('checkout')}>Checkout →</button>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {tab === 'profile' && (
+          <div className="account-panel">
+            <div className="field-row cols-2">
+              <div className="field"><span className="field-lbl">Name</span><input defaultValue={customer.name}/></div>
+              <div className="field"><span className="field-lbl">Email</span><input defaultValue={customer.email}/></div>
+            </div>
+            <div className="field-row cols-2" style={{ marginTop: 16 }}>
+              <div className="field"><span className="field-lbl">Phone</span><input defaultValue="(704) 555-0142"/></div>
+              <div className="field"><span className="field-lbl">Newsletter</span><select><option>Subscribed</option><option>Unsubscribed</option></select></div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
+              <button className="btn btn-sage">Save changes</button>
+            </div>
+          </div>
+        )}
+
+        {tab === 'addresses' && (
+          <div className="account-panel">
+            <div className="account-address">
+              <div className="account-address-tag">Default · shipping</div>
+              <div className="account-address-body">
+                {customer.name}<br/>
+                123 N Tryon St<br/>
+                Charlotte, NC 28202<br/>
+                United States
+              </div>
+              <div className="account-address-actions">
+                <button className="filter-pill">Edit</button>
+                <button className="filter-pill">Remove</button>
+              </div>
+            </div>
+            <button className="btn btn-ghost" style={{ marginTop: 16 }}>+ Add address</button>
+          </div>
+        )}
+
+        {tab === 'payment' && (
+          <div className="account-panel">
+            <div className="account-card">
+              <div className="account-card-brand">VISA</div>
+              <div>
+                <div style={{ fontWeight: 700 }}>•••• •••• •••• 4242</div>
+                <div style={{ fontSize: 12, color: 'var(--mute)' }}>Expires 09/29 · Default</div>
+              </div>
+              <div className="account-address-actions">
+                <button className="filter-pill">Edit</button>
+                <button className="filter-pill">Remove</button>
+              </div>
+            </div>
+            <button className="btn btn-ghost" style={{ marginTop: 16 }}>+ Add payment method</button>
+          </div>
+        )}
+
+        {tab === 'wishlist' && (
+          <div className="grid-products" style={{ marginTop: 8 }}>
+            {wishlist.map((p, i) => (
+              <ProductCard key={p.id} p={p} navigate={navigate} onQuickView={() => {}} idx={i}/>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 Object.assign(window, {
   TopBar, Footer, ProductCard,
   HomeStadium, HomeStorybook, HomeCozy,
   ShopPage, ProductDetail, CollectionsPage, AboutPage,
+  AccountModal, CustomerAccount,
 });
