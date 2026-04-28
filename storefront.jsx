@@ -54,7 +54,7 @@ function Footer({ route }) {
           <div>
             <div className="footer-mark">TonePrints</div>
             <p style={{ opacity: 0.8, maxWidth: '34ch', fontSize: 14, lineHeight: 1.6 }}>
-              A small studio making picture books and photo prints. Made with care in Amsterdam, shipped worldwide.
+              A small studio making picture books and photo prints. Made with care in the USA, shipped worldwide.
             </p>
           </div>
           <div>
@@ -87,7 +87,7 @@ function Footer({ route }) {
         </div>
         <div className="footer-bottom">
           <span>© 2026 TonePrints — printed with care</span>
-          <span>Amsterdam, NL · Est. 2023</span>
+          <span>Brooklyn, NY · Est. 2023</span>
         </div>
       </div>
     </footer>
@@ -109,7 +109,7 @@ function ProductCard({ p, navigate, onQuickView, idx = 0 }) {
       <div className="product-card-meta">
         <div className="product-card-title">{p.title}</div>
         <div className="product-card-sub">{p.sub}</div>
-        <div className="product-card-price">€{p.price}</div>
+        <div className="product-card-price">${p.price}</div>
       </div>
     </div>
   );
@@ -148,7 +148,7 @@ function HomeStadium({ navigate, onQuickView }) {
             <div><ToneArt seed={3} motif="balloon"/></div>
             <div><ToneArt seed={5} motif="photo-soft"/></div>
             <div className="hero-sticker">
-              <div>Free EU<br/>shipping<br/>over €60</div>
+              <div>Free US<br/>shipping<br/>over $60</div>
             </div>
           </div>
         </section>
@@ -225,7 +225,7 @@ function HomeStadium({ navigate, onQuickView }) {
           <div>
             <span className="eyebrow">Photo prints</span>
             <h3 style={{ marginTop: 14 }}>Made <em>just for you,</em> on archival paper.</h3>
-            <p>Every print is made to order on Hahnemühle photo rag and signed in pencil on the back. Open editions start at €32, limited editions at €58.</p>
+            <p>Every print is made to order on Hahnemühle photo rag and signed in pencil on the back. Open editions start at $32, limited editions at $58.</p>
             <button className="btn btn-sage" onClick={() => navigate('shop')}>
               Browse prints <span className="arrow">→</span>
             </button>
@@ -242,7 +242,7 @@ function HomeStadium({ navigate, onQuickView }) {
           {[
             { stars: '★★★★★', text: 'My three-year-old asks for "the fox book" every single night. The illustrations are so warm and soft.', name: 'Amelia P.', loc: 'Utrecht' },
             { stars: '★★★★★', text: 'Bought a print as a baby gift. The colors are dreamy and it arrived beautifully packaged. The new parents adored it.', name: 'David K.', loc: 'Brooklyn' },
-            { stars: '★★★★★', text: 'Quality is wonderful — thick paper, lovely binding. Feels like a book that will be passed down.', name: 'Saskia M.', loc: 'Amsterdam' },
+            { stars: '★★★★★', text: 'Quality is wonderful — thick paper, lovely binding. Feels like a book that will be passed down.', name: 'Sarah M.', loc: 'Portland, OR' },
           ].map((t, i) => (
             <div key={i} className="testimonial">
               <div className="stars">{t.stars}</div>
@@ -261,7 +261,7 @@ function HomeStadium({ navigate, onQuickView }) {
         <div className="trust-strip">
           <div className="trust-item">
             <div className="ti-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 7l7-4 7 4v6l-7 4-7-4z" stroke="#536B47" strokeWidth="1.5" strokeLinejoin="round"/></svg></div>
-            <div><h4>Free EU shipping</h4><p>On orders over €60</p></div>
+            <div><h4>Free US shipping</h4><p>On orders over $60</p></div>
           </div>
           <div className="trust-item">
             <div className="ti-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8a5 5 0 1110 0v3a5 5 0 11-10 0z" stroke="#8A6328" strokeWidth="1.5"/></svg></div>
@@ -312,7 +312,7 @@ function HomeStorybook({ navigate, onQuickView }) {
               <span className="text-reveal"><span style={{ animationDelay: '0.24s', fontStyle: 'italic', color: 'var(--sage-deep)' }}>page.</span></span>
             </h1>
             <p style={{ marginTop: 24, fontSize: 17, color: 'var(--ink-soft)', maxWidth: '38ch' }}>
-              Hand-illustrated picture books and warm photo prints, made in our Amsterdam studio.
+              Hand-illustrated picture books and warm photo prints, made in our Brooklyn studio.
             </p>
             <div className="hero-actions">
               <button className="btn btn-primary" onClick={() => navigate('shop')}>Shop everything <span className="arrow">→</span></button>
@@ -356,7 +356,7 @@ function HomeCozy({ navigate, onQuickView }) {
     <div className="page">
       <div className="container">
         <section style={{ padding: '60px 0 40px', textAlign: 'center', maxWidth: 720, margin: '0 auto' }}>
-          <span className="eyebrow">Picture books · Photo prints · Made in Amsterdam</span>
+          <span className="eyebrow">Picture books · Photo prints · Made in USA</span>
           <h1 className="font-display" style={{ fontSize: 'clamp(56px, 7vw, 96px)', fontWeight: 350, letterSpacing: '-0.025em', lineHeight: 0.98, marginTop: 18 }}>
             <span className="text-reveal"><span>Books and prints</span></span><br/>
             <span className="text-reveal"><span style={{ animationDelay: '0.12s', fontStyle: 'italic', color: 'var(--sage-deep)' }}>for cozy days.</span></span>
@@ -416,7 +416,7 @@ function ShopPage({ navigate, onQuickView }) {
               <span className="text-reveal"><span style={{ animationDelay: '0.1s', fontStyle: 'italic', color: 'var(--sage-deep)' }}>shop.</span></span>
             </h1>
           </div>
-          <p>Picture books, chapter books, and photo prints from our Amsterdam studio. New work added on the first Friday of each month.</p>
+          <p>Picture books, chapter books, and photo prints from our Brooklyn studio. New work added on the first Friday of each month.</p>
         </section>
 
         <div className="filter-bar">
@@ -499,7 +499,7 @@ function ProductDetail({ id, navigate, addToCart }) {
               <span className="stars">★★★★★</span>
               <span>4.9 · 127 reviews</span>
             </div>
-            <div className="pdp-price">€{sizePrice(size)}.00</div>
+            <div className="pdp-price">${sizePrice(size)}.00</div>
 
             <p className="pdp-desc">
               {isPrint
@@ -512,21 +512,21 @@ function ProductDetail({ id, navigate, addToCart }) {
               {p.sizes.map(s => (
                 <button key={s} className={`option ${size === s ? 'active' : ''}`} onClick={() => setSize(s)}>
                   <div className="option-name">{s}</div>
-                  <div className="option-meta">€{sizePrice(s)}</div>
+                  <div className="option-meta">${sizePrice(s)}</div>
                 </button>
               ))}
             </div>
 
             <button className="btn btn-sage btn-block" onClick={handleAdd} disabled={adding}>
               {adding ? <><span className="spinner" style={{ borderTopColor: 'var(--paper)', borderColor: 'rgba(255,255,255,0.3)' }}></span> Adding…</> :
-                <>Add to cart — €{sizePrice(size)}</>}
+                <>Add to cart — ${sizePrice(size)}</>}
             </button>
 
             <ul className="spec-list">
               <li><dt>Format</dt><dd>{p.edition}</dd></li>
               <li><dt>Paper</dt><dd>{p.paper}</dd></li>
               <li><dt>Year</dt><dd>{p.year}</dd></li>
-              <li><dt>Made in</dt><dd>Amsterdam, NL</dd></li>
+              <li><dt>Made in</dt><dd>Brooklyn, NY</dd></li>
               <li><dt>Shipping</dt><dd>{isPrint ? 'Flat in protective sleeve · 3–8 days' : 'Sturdy mailer · 3–8 days'}</dd></li>
             </ul>
           </div>
@@ -603,7 +603,7 @@ function AboutPage({ navigate }) {
         <section className="about-cols">
           <div>
             <span className="eyebrow">The work</span>
-            <p style={{ marginTop: 16 }}>TonePrints is a small studio based in Amsterdam, making picture books for small readers and photo prints for the homes that hold them. We work with a handful of illustrators and photographers, mostly local, mostly friends.</p>
+            <p style={{ marginTop: 16 }}>TonePrints is a small studio based in Brooklyn, making picture books for small readers and photo prints for the homes that hold them. We work with a handful of illustrators and photographers, mostly local, mostly friends.</p>
             <p>Each new title is announced on the first Friday of the month. We print in small runs and ship from our studio, usually within a day.</p>
           </div>
           <div>

@@ -79,9 +79,9 @@ function AdminDashboard() {
 
       <div className="stat-grid stagger">
         {[
-          { l: 'Revenue', v: '€8,420', d: '+12.4%', up: true },
+          { l: 'Revenue', v: '$8,420', d: '+12.4%', up: true },
           { l: 'Orders', v: '47', d: '+6 vs prev', up: true },
-          { l: 'Avg. order', v: '€179', d: '+€12', up: true },
+          { l: 'Avg. order', v: '$179', d: '+$12', up: true },
           { l: 'Conversion', v: '3.8%', d: '−0.3pt', up: false },
         ].map(s => (
           <div key={s.l} className="stat-card">
@@ -99,7 +99,7 @@ function AdminDashboard() {
           <div className="admin-card-head">
             <div>
               <h3>Revenue · last 14 days</h3>
-              <span className="eyebrow" style={{ marginTop: 4, display: 'inline-block' }}>€8,420 total</span>
+              <span className="eyebrow" style={{ marginTop: 4, display: 'inline-block' }}>$8,420 total</span>
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <button className="filter-pill active">Revenue</button>
@@ -160,7 +160,7 @@ function AdminDashboard() {
                 <td>{o.customer}</td>
                 <td className="font-mono" style={{ fontSize: 12, color: 'var(--mute)' }}>{o.date}</td>
                 <td>{o.items}</td>
-                <td className="font-mono">€{o.total.toFixed(2)}</td>
+                <td className="font-mono">${o.total.toFixed(2)}</td>
                 <td><span className={`status-pill status-${o.status}`}>{o.status}</span></td>
               </tr>
             ))}
@@ -220,7 +220,7 @@ function AdminProducts({ openProduct }) {
                 <td>{p.category}</td>
                 <td className="font-mono" style={{ fontSize: 11 }}>{p.edition}</td>
                 <td className="font-mono">{p.stock}</td>
-                <td className="font-mono">€{p.price}</td>
+                <td className="font-mono">${p.price}</td>
                 <td>
                   <span className={`status-pill ${p.stock < 5 ? 'status-low' : p.stock === 0 ? 'status-out' : 'status-active'}`}>
                     {p.stock === 0 ? 'sold out' : p.stock < 5 ? 'low' : 'active'}
@@ -350,7 +350,7 @@ function ProductEditor({ open, product, onClose, addToast }) {
           <section style={{ marginBottom: 28 }}>
             <h3 className="font-display" style={{ fontSize: 18, fontWeight: 500, marginBottom: 16 }}>Pricing & inventory</h3>
             <div className="field-row cols-3">
-              <div className="field"><span className="field-lbl">Price (EUR)</span>
+              <div className="field"><span className="field-lbl">Price (USD)</span>
                 <input type="number" value={form.price} onChange={(e) => setForm({ ...form, price: +e.target.value })}/>
               </div>
               <div className="field"><span className="field-lbl">Stock</span>
@@ -450,7 +450,7 @@ function AdminOrders({ openOrder }) {
                 <td className="font-mono" style={{ fontSize: 12, color: 'var(--mute)' }}>{o.date}</td>
                 <td>{o.items}</td>
                 <td className="font-mono" style={{ fontSize: 11 }}>{o.ship}</td>
-                <td className="font-mono">€{o.total.toFixed(2)}</td>
+                <td className="font-mono">${o.total.toFixed(2)}</td>
                 <td><span className={`status-pill status-${o.status}`}>{o.status}</span></td>
                 <td style={{ textAlign: 'right', color: 'var(--mute)' }}>→</td>
               </tr>
@@ -491,7 +491,7 @@ function OrderDetail({ open, order, onClose, addToast }) {
 
   const steps = [
     { name: 'Order placed', meta: order.date, done: stage >= 0 },
-    { name: 'Payment captured', meta: '€' + order.total.toFixed(2) + ' · Stripe', done: stage >= 1 },
+    { name: 'Payment captured', meta: '$' + order.total.toFixed(2) + ' · Stripe', done: stage >= 1 },
     { name: 'Shipped', meta: stage >= 2 ? 'Track: NL-2026-04-' + order.id.replace('#', '') : 'Awaiting label', done: stage >= 2 },
     { name: 'Delivered', meta: stage >= 3 ? 'Confirmed' : 'In transit', done: stage >= 3 },
   ];
@@ -522,7 +522,7 @@ function OrderDetail({ open, order, onClose, addToast }) {
               <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, marginTop: 8, fontWeight: 400 }}>{order.customer}</div>
               <div style={{ fontSize: 12, color: 'var(--mute)', marginTop: 4 }}>{order.email}</div>
               <div style={{ marginTop: 16, fontSize: 13, lineHeight: 1.6 }}>
-                Prinsengracht 263<br/>1016 GV Amsterdam<br/>Netherlands
+                123 Hudson Ave<br/>Brooklyn, NY 11201<br/>United States
               </div>
             </div>
             <div className="admin-card">
@@ -532,13 +532,13 @@ function OrderDetail({ open, order, onClose, addToast }) {
                   <span style={{ fontSize: 12, color: 'var(--mute)' }}>Method</span><span style={{ fontSize: 13 }}>{order.ship}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0' }}>
-                  <span style={{ fontSize: 12, color: 'var(--mute)' }}>Carrier</span><span style={{ fontSize: 13, fontFamily: 'var(--font-mono)' }}>PostNL</span>
+                  <span style={{ fontSize: 12, color: 'var(--mute)' }}>Carrier</span><span style={{ fontSize: 13, fontFamily: 'var(--font-mono)' }}>USPS</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0' }}>
                   <span style={{ fontSize: 12, color: 'var(--mute)' }}>Payment</span><span style={{ fontSize: 13 }}>Visa •••• 4242</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0' }}>
-                  <span style={{ fontSize: 12, color: 'var(--mute)' }}>Total paid</span><span className="font-mono" style={{ fontSize: 13, fontWeight: 500 }}>€{order.total.toFixed(2)}</span>
+                  <span style={{ fontSize: 12, color: 'var(--mute)' }}>Total paid</span><span className="font-mono" style={{ fontSize: 13, fontWeight: 500 }}>${order.total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -581,7 +581,7 @@ function OrderDetail({ open, order, onClose, addToast }) {
                     <div className="eyebrow" style={{ marginTop: 2 }}>{p.sizes[0]} · {p.edition}</div>
                   </div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--mute)' }}>×1</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>€{p.price}.00</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>${p.price}.00</div>
                 </div>
               );
             })}
@@ -619,7 +619,7 @@ function AdminCustomers() {
       <div className="stat-grid stagger" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
         <div className="stat-card"><span className="stat-card-label">Total customers</span><span className="stat-card-value">{CUSTOMERS.length}</span><span className="stat-card-delta up">↑ +3 this month</span></div>
         <div className="stat-card"><span className="stat-card-label">Repeat rate</span><span className="stat-card-value">62%</span><span className="stat-card-delta up">↑ +4 pt</span></div>
-        <div className="stat-card"><span className="stat-card-label">Avg. lifetime value</span><span className="stat-card-value">€1,540</span><span className="stat-card-delta up">↑ +€120</span></div>
+        <div className="stat-card"><span className="stat-card-label">Avg. lifetime value</span><span className="stat-card-value">$1,540</span><span className="stat-card-delta up">↑ +$120</span></div>
       </div>
 
       <div className="table-wrap">
@@ -640,7 +640,7 @@ function AdminCustomers() {
                 <td>{c.location}</td>
                 <td className="font-mono" style={{ fontSize: 12, color: 'var(--mute)' }}>{c.joined}</td>
                 <td className="font-mono">{c.orders}</td>
-                <td className="font-mono">€{c.spent.toFixed(2)}</td>
+                <td className="font-mono">${c.spent.toFixed(2)}</td>
                 <td style={{ textAlign: 'right', color: 'var(--mute)' }}>→</td>
               </tr>
             ))}
@@ -678,7 +678,7 @@ function AdminShipping({ addToast }) {
             <p>Orders over this amount qualify for free standard shipping within the EU.</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'var(--font-mono)' }}>
-            <span style={{ color: 'var(--mute)' }}>€</span>
+            <span style={{ color: 'var(--mute)' }}>$</span>
             <input defaultValue="150" style={{ width: 80, border: '1px solid var(--line)', borderRadius: 8, padding: '8px 12px', textAlign: 'right', fontFamily: 'inherit' }}/>
           </div>
         </div>
@@ -714,8 +714,8 @@ function AdminShipping({ addToast }) {
               {z.rates.map((r, j) => (
                 <div key={j} className="zone-rate-row">
                   <span>{r.name}</span>
-                  <span className="font-mono">€{r.price.toFixed(2)}</span>
-                  <span className="font-mono" style={{ color: 'var(--mute)' }}>€{r.free_over}</span>
+                  <span className="font-mono">${r.price.toFixed(2)}</span>
+                  <span className="font-mono" style={{ color: 'var(--mute)' }}>${r.free_over}</span>
                   <button style={{ color: 'var(--mute)' }}>···</button>
                 </div>
               ))}
@@ -742,9 +742,9 @@ function AdminPayments() {
 
       <div className="admin-grid">
         {[
-          { name: 'Stripe', meta: 'Cards, Apple Pay, Google Pay', balance: '€2,840.50', payout: 'Apr 28', on: true },
-          { name: 'iDEAL', meta: 'Mollie · Netherlands', balance: '€1,120.00', payout: 'Apr 27', on: true },
-          { name: 'PayPal', meta: 'Business account', balance: '€340.00', payout: 'Apr 30', on: true },
+          { name: 'Stripe', meta: 'Cards, Apple Pay, Google Pay', balance: '$2,840.50', payout: 'Apr 28', on: true },
+          { name: 'Cash App Pay', meta: 'Block · United States', balance: '$1,120.00', payout: 'Apr 27', on: true },
+          { name: 'PayPal', meta: 'Business account', balance: '$340.00', payout: 'Apr 30', on: true },
           { name: 'Klarna', meta: 'Pay in 3 · BNPL', balance: '—', payout: 'Not connected', on: false },
         ].map(p => (
           <div key={p.name} className="admin-card">
@@ -770,18 +770,18 @@ function AdminPayments() {
       </div>
 
       <div className="admin-card" style={{ marginTop: 24 }}>
-        <div className="admin-card-head"><h3>Tax & VAT</h3></div>
+        <div className="admin-card-head"><h3>Sales tax</h3></div>
         <div className="setting-row">
-          <div><h4>Charge VAT</h4><p>Automatically calculate and charge VAT on EU orders.</p></div>
+          <div><h4>Charge sales tax</h4><p>Automatically calculate and charge sales tax on US orders by state.</p></div>
           <Switch defaultOn={true}/>
         </div>
         <div className="setting-row">
-          <div><h4>VAT number</h4><p>Display on receipts and invoices.</p></div>
-          <span className="font-mono" style={{ fontSize: 13 }}>NL 8521.49.226 B01</span>
+          <div><h4>EIN</h4><p>Display on receipts and invoices.</p></div>
+          <span className="font-mono" style={{ fontSize: 13 }}>EIN 88-1234567</span>
         </div>
         <div className="setting-row">
-          <div><h4>Default rate (NL)</h4><p>Standard rate applied to orders shipping within the Netherlands.</p></div>
-          <span className="font-mono" style={{ fontSize: 13 }}>21%</span>
+          <div><h4>Default rate (NY)</h4><p>Sales tax rate applied to orders shipping within New York.</p></div>
+          <span className="font-mono" style={{ fontSize: 13 }}>8.875%</span>
         </div>
       </div>
     </div>

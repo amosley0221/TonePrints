@@ -217,7 +217,7 @@ const COLLECTIONS = [
 ];
 
 const ORDERS = [
-  { id: '#TP-2814', customer: 'Maya Yamasaki', email: 'maya@hey.com', date: '2026-04-25', total: 64.00, status: 'pending', items: 3, ship: 'Standard · NL' },
+  { id: '#TP-2814', customer: 'Maya Yamasaki', email: 'maya@hey.com', date: '2026-04-25', total: 64.00, status: 'pending', items: 3, ship: 'Standard · US' },
   { id: '#TP-2813', customer: 'Adesola Folarin', email: 'adesola@kindred.studio', date: '2026-04-25', total: 138.00, status: 'processing', items: 4, ship: 'Express · UK' },
   { id: '#TP-2812', customer: 'Jonas Bergmann', email: 'jb@bergmann.co', date: '2026-04-24', total: 38.00, status: 'shipped', items: 1, ship: 'Standard · DE' },
   { id: '#TP-2811', customer: 'Sade Okafor', email: 'sade@thirdroom.io', date: '2026-04-24', total: 92.00, status: 'shipped', items: 3, ship: 'Standard · US' },
@@ -228,7 +228,7 @@ const ORDERS = [
 ];
 
 const CUSTOMERS = [
-  { name: 'Maya Yamasaki', email: 'maya@hey.com', orders: 4, spent: 248.00, location: 'Amsterdam, NL', joined: '2024-11' },
+  { name: 'Maya Yamasaki', email: 'maya@hey.com', orders: 4, spent: 248.00, location: 'Brooklyn, NY', joined: '2024-11' },
   { name: 'Adesola Folarin', email: 'adesola@kindred.studio', orders: 7, spent: 612.50, location: 'London, UK', joined: '2024-03' },
   { name: 'Jonas Bergmann', email: 'jb@bergmann.co', orders: 2, spent: 86.00, location: 'Berlin, DE', joined: '2025-08' },
   { name: 'Sade Okafor', email: 'sade@thirdroom.io', orders: 5, spent: 312.00, location: 'Brooklyn, US', joined: '2024-07' },
@@ -239,18 +239,18 @@ const CUSTOMERS = [
 ];
 
 const SHIPPING_ZONES = [
-  { id: 'z1', name: 'Domestic — Netherlands', countries: 'NL', rates: [
+  { id: 'z1', name: 'Domestic — United States', countries: 'US', rates: [
     { name: 'Standard (3–5 days)', price: 4.50, free_over: 35 },
     { name: 'Express (1–2 days)', price: 8.00, free_over: 75 },
   ]},
-  { id: 'z2', name: 'European Union', countries: 'BE, DE, FR, IT, ES +20', rates: [
-    { name: 'Standard (5–8 days)', price: 9.00, free_over: 60 },
-    { name: 'Express (2–4 days)', price: 18.00, free_over: 120 },
+  { id: 'z2', name: 'Canada & Mexico', countries: 'CA, MX', rates: [
+    { name: 'Standard (5–8 days)', price: 12.00, free_over: 75 },
+    { name: 'Express (2–4 days)', price: 24.00, free_over: 150 },
   ]},
   { id: 'z3', name: 'United Kingdom', countries: 'UK', rates: [
-    { name: 'Standard (5–8 days)', price: 12.00, free_over: 75 },
+    { name: 'Standard (5–8 days)', price: 14.00, free_over: 90 },
   ]},
-  { id: 'z4', name: 'United States & Canada', countries: 'US, CA', rates: [
+  { id: 'z4', name: 'European Union', countries: 'BE, DE, FR, IT, ES +20', rates: [
     { name: 'Standard (7–14 days)', price: 18.00, free_over: 100 },
     { name: 'Express (3–5 days)', price: 38.00, free_over: 200 },
   ]},
