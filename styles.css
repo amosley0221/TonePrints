@@ -1469,6 +1469,37 @@ img { display: block; max-width: 100%; }
   text-align: center;
 }
 
+/* ─── Product card · right-aligned digital chip ───────────────── */
+.product-card-tag-r {
+  position: absolute; top: 12px; right: 12px;
+  z-index: 2;
+}
+
+/* ─── Digital download note (PDP + QuickView) ─────────────────── */
+.digital-note {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: #DCE8EC;          /* sky-soft */
+  color: #2F4A52;
+  padding: 14px 16px;
+  border-radius: 14px;
+  margin: 18px 0 6px;
+  font-size: 13px; line-height: 1.5;
+}
+.digital-note > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #436670;
+}
+.digital-note strong {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.digital-note span {
+  color: #436670;
+  font-weight: 500;
+}
+
 /* ─── Cozy split layout (Home / Cozy) ─────────────────────────── */
 .cozy-split {
   display: grid;

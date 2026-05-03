@@ -42,7 +42,7 @@ function CartDrawer({ open, onClose, cart, setCart, navigate }) {
             cart.map((it, i) => (
               <div key={`${it.id}-${it.size}-${i}`} className="cart-row">
                 <div className="cart-row-thumb">
-                  <ToneArt seed={it.id.charCodeAt(3)} motif={it.motif}/>
+                  <ProductImage product={it}/>
                 </div>
                 <div>
                   <div style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 500, letterSpacing: '-0.01em' }}>{it.title}</div>
@@ -96,7 +96,8 @@ function QuickView({ product, onClose, addToCart, navigate }) {
     <div className={`modal-backdrop ${product ? 'open' : ''}`} onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div style={{ background: 'var(--cream-2)', position: 'relative' }}>
-          <ToneArt seed={product.id.charCodeAt(3)} motif={product.motif} label={product.title} edition={product.edition}/>
+          <ProductImage product={product}/>
+          {product.digital && <span className="tag sky" style={{ position: 'absolute', top: 14, left: 14, zIndex: 2 }}>Digital</span>}
         </div>
         <div style={{ padding: 40, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
           <button className="icon-btn" style={{ position: 'absolute', top: 16, right: 16 }} onClick={onClose}>
@@ -104,22 +105,35 @@ function QuickView({ product, onClose, addToCart, navigate }) {
           </button>
           <span className="eyebrow">{product.category} · {product.edition}</span>
           <h2 className="font-display" style={{ fontSize: 40, fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1.05, margin: '8px 0 12px' }}>{product.title}</h2>
-          <div style={{ fontSize: 22, fontWeight: 700 }}>${sizePrice(size)}.00</div>
+          <div style={{ fontSize: 22, fontWeight: 700 }}>${fmt(sizePrice(size))}</div>
+          {product.digital && (
+            <div className="digital-note" style={{ marginTop: 16 }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M8 2v8m0 0l-3-3m3 3l3-3M3 13h10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <div>
+                <strong>Digital photo only — frame not included.</strong>
+                <span>High-resolution download delivered after checkout.</span>
+              </div>
+            </div>
+          )}
           <p style={{ marginTop: 20, fontSize: 14, color: 'var(--ink-soft)', lineHeight: 1.7 }}>
-            {product.sub} on {product.paper}. Made with care in our Charlotte studio.
+            {product.digital
+              ? `${product.sub}. An instant digital download (PNG + print-ready PDF) suitable for printing up to 24×36 inches.`
+              : `${product.sub} on ${product.paper}. Made with care in our Charlotte studio.`}
           </p>
           <div className="eyebrow" style={{ marginTop: 24, marginBottom: 10 }}>Format</div>
           <div className="option-grid" style={{ gridTemplateColumns: `repeat(${product.sizes.length}, 1fr)` }}>
             {product.sizes.map(s => (
               <button key={s} className={`option ${size === s ? 'active' : ''}`} onClick={() => setSize(s)}>
                 <div className="option-name">{s}</div>
-                <div className="option-meta">${sizePrice(s)}</div>
+                <div className="option-meta">${fmt(sizePrice(s))}</div>
               </button>
             ))}
           </div>
           <button className="btn btn-sage btn-block" style={{ marginTop: 'auto' }}
                   onClick={() => { addToCart({ ...product, size, qty: 1 }); onClose(); }}>
-            Add to basket — ${sizePrice(size)}
+            {product.digital ? 'Buy & download' : 'Add to basket'} — ${fmt(sizePrice(size))}
           </button>
           <button className="btn btn-ghost" style={{ marginTop: 8, justifyContent: 'center' }}
                   onClick={() => { onClose(); navigate(`product:${product.id}`); }}>
@@ -274,7 +288,7 @@ function CheckoutPage({ cart, setCart, navigate, addToast }) {
             {cart.map((it, i) => (
               <div key={i} className="summary-item">
                 <div className="placeholder-img">
-                  <ToneArt seed={it.id.charCodeAt(3)} motif={it.motif}/>
+                  <ProductImage product={it}/>
                 </div>
                 <div>
                   <div style={{ fontWeight: 600 }}>{it.title}</div>

@@ -208,6 +208,12 @@ const PRODUCTS = [
   { id: 'tp010', title: 'Where the Hills Begin', sub: 'Photo print · Limited ed.', price: 58, category: 'Photo Prints', motif: 'photo-landscape', edition: 'ED. 04/40', sizes: ['11×14', '16×20'], year: 2025, paper: 'Hahnemühle photo rag', stock: 18 },
   { id: 'tp011', title: 'Honey & Hazel', sub: "Picture book · Ages 3–7", price: 24, category: 'Picture Books', motif: 'rabbit', edition: '44 PAGES', sizes: ['Hardcover'], year: 2026, paper: 'FSC matte board', stock: 42, badge: 'New' },
   { id: 'tp012', title: 'A First Alphabet', sub: "Learning book · Ages 2–4", price: 18, category: 'Picture Books', motif: 'lettering', edition: '52 PAGES', sizes: ['Board book'], year: 2024, paper: 'Recycled board', stock: 96 },
+  // ── Travel poster series · digital downloads ─────────────────────────
+  { id: 'tp013', title: 'Cape Town', sub: 'Travel poster · South Africa', price: 9.99, category: 'Photo Prints', motif: 'photo-landscape', edition: 'DIGITAL DOWNLOAD', sizes: ['Digital download'], year: 2026, paper: 'High-resolution PNG + PDF', stock: 9999, image: 'images/photo-prints/cape-town.jpg', digital: true, badge: 'New' },
+  { id: 'tp014', title: 'Florence', sub: 'Travel poster · Italy', price: 9.99, category: 'Photo Prints', motif: 'photo-landscape', edition: 'DIGITAL DOWNLOAD', sizes: ['Digital download'], year: 2026, paper: 'High-resolution PNG + PDF', stock: 9999, image: 'images/photo-prints/florence.jpg', digital: true, badge: 'New' },
+  { id: 'tp015', title: 'London', sub: 'Travel poster · United Kingdom', price: 9.99, category: 'Photo Prints', motif: 'photo-landscape', edition: 'DIGITAL DOWNLOAD', sizes: ['Digital download'], year: 2026, paper: 'High-resolution PNG + PDF', stock: 9999, image: 'images/photo-prints/london.jpg', digital: true, badge: 'New' },
+  { id: 'tp016', title: 'Philadelphia', sub: 'Travel poster · Pennsylvania', price: 9.99, category: 'Photo Prints', motif: 'photo-landscape', edition: 'DIGITAL DOWNLOAD', sizes: ['Digital download'], year: 2026, paper: 'High-resolution PNG + PDF', stock: 9999, image: 'images/photo-prints/philadelphia.jpg', digital: true, badge: 'New' },
+  { id: 'tp017', title: 'Tampa', sub: 'Travel poster · Florida', price: 9.99, category: 'Photo Prints', motif: 'photo-landscape', edition: 'DIGITAL DOWNLOAD', sizes: ['Digital download'], year: 2026, paper: 'High-resolution PNG + PDF', stock: 9999, image: 'images/photo-prints/tampa.jpg', digital: true, badge: 'New' },
 ];
 
 const COLLECTIONS = [
@@ -259,4 +265,30 @@ const SHIPPING_ZONES = [
   ]},
 ];
 
-Object.assign(window, { ToneArt, PRODUCTS, COLLECTIONS, ORDERS, CUSTOMERS, SHIPPING_ZONES });
+// ProductImage — renders a real photograph if `product.image` is set,
+// otherwise falls back to the in-house ToneArt SVG illustration.
+function ProductImage({ product, alt, idx = 0 }) {
+  if (product && product.image) {
+    return (
+      <img
+        src={product.image}
+        alt={alt || product.title}
+        loading="lazy"
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+      />
+    );
+  }
+  return <ToneArt
+    seed={(product?.id?.charCodeAt(3) || 0) + idx}
+    motif={product?.motif}
+    label={product?.title}
+    edition={product?.edition}
+  />;
+}
+
+// fmt — money formatter that preserves cents only when needed.
+function fmt(n) {
+  return Number(n).toFixed(2).replace(/\.00$/, '');
+}
+
+Object.assign(window, { ToneArt, ProductImage, fmt, PRODUCTS, COLLECTIONS, ORDERS, CUSTOMERS, SHIPPING_ZONES });

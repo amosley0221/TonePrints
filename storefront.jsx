@@ -110,8 +110,9 @@ function ProductCard({ p, navigate, onQuickView, idx = 0 }) {
   return (
     <div className="product-card" style={{ animationDelay: `${idx * 0.04}s` }}>
       <div className="product-card-img" onClick={() => navigate(`product:${p.id}`)}>
-        <ToneArt seed={p.id.charCodeAt(3) + idx} motif={p.motif} label={p.title} edition={p.edition}/>
+        <ProductImage product={p} idx={idx}/>
         {p.badge && <span className={`tag product-card-tag ${p.badge === 'Bestseller' ? 'butter' : ''}`}>{p.badge}</span>}
+        {p.digital && <span className="tag sky product-card-tag product-card-tag-r">Digital</span>}
         <div className="product-card-quick" onClick={(e) => { e.stopPropagation(); onQuickView(p); }}>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2v10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
           Quick add
@@ -120,7 +121,7 @@ function ProductCard({ p, navigate, onQuickView, idx = 0 }) {
       <div className="product-card-meta">
         <div className="product-card-title">{p.title}</div>
         <div className="product-card-sub">{p.sub}</div>
-        <div className="product-card-price">${p.price}</div>
+        <div className="product-card-price">${fmt(p.price)}</div>
       </div>
     </div>
   );
@@ -474,6 +475,7 @@ function ProductDetail({ id, navigate, addToCart }) {
   };
 
   const isPrint = p.category === 'Photo Prints';
+  const isDigital = !!p.digital;
   const altMotifs = ['meadow', 'critter', 'cottage', 'rabbit'];
 
   return (
@@ -489,18 +491,22 @@ function ProductDetail({ id, navigate, addToCart }) {
           <div className="pdp-gallery">
             <div className="pdp-main-image" key={thumbIdx}>
               <div style={{ animation: 'page-in 0.5s var(--ease-out)', width: '100%', height: '100%' }}>
-                <ToneArt seed={p.id.charCodeAt(3) + thumbIdx} motif={thumbIdx === 0 ? p.motif : altMotifs[thumbIdx]} label={p.title} edition={p.edition}/>
+                {p.image
+                  ? <ProductImage product={p}/>
+                  : <ToneArt seed={p.id.charCodeAt(3) + thumbIdx} motif={thumbIdx === 0 ? p.motif : altMotifs[thumbIdx]} label={p.title} edition={p.edition}/>}
               </div>
             </div>
-            <div className="pdp-thumbs">
-              {[0, 1, 2, 3].map(i => (
-                <button key={i}
-                        className={`pdp-thumb ${i === thumbIdx ? 'active' : ''}`}
-                        onClick={() => setThumbIdx(i)}>
-                  <ToneArt seed={p.id.charCodeAt(3) + i} motif={i === 0 ? p.motif : altMotifs[i]}/>
-                </button>
-              ))}
-            </div>
+            {!p.image && (
+              <div className="pdp-thumbs">
+                {[0, 1, 2, 3].map(i => (
+                  <button key={i}
+                          className={`pdp-thumb ${i === thumbIdx ? 'active' : ''}`}
+                          onClick={() => setThumbIdx(i)}>
+                    <ToneArt seed={p.id.charCodeAt(3) + i} motif={i === 0 ? p.motif : altMotifs[i]}/>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="pdp-info">
@@ -510,35 +516,49 @@ function ProductDetail({ id, navigate, addToCart }) {
               <span className="stars">★★★★★</span>
               <span>4.9 · 127 reviews</span>
             </div>
-            <div className="pdp-price">${sizePrice(size)}.00</div>
+            <div className="pdp-price">${fmt(sizePrice(size))}</div>
+
+            {isDigital && (
+              <div className="digital-note">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M8 2v8m0 0l-3-3m3 3l3-3M3 13h10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <div>
+                  <strong>Digital photo only — frame not included.</strong>
+                  <span>You’ll receive a high-resolution download (PNG &amp; PDF) right after purchase. Print at home or at your local print shop, then frame in the size you love.</span>
+                </div>
+              </div>
+            )}
 
             <p className="pdp-desc">
-              {isPrint
-                ? `A ${p.sub.toLowerCase()} printed to order on archival ${p.paper}. Each print is signed in pencil on the back and shipped flat in protective sleeves. Frame not included.`
-                : `${p.sub}. Hand-illustrated and printed on FSC-certified ${p.paper}. Sturdy enough for little hands, beautiful enough to keep on the shelf.`}
+              {isDigital
+                ? `${p.sub}. An instant digital download — high-resolution PNG and print-ready PDF, suitable for printing up to 24×36 inches at home or via a local print shop.`
+                : isPrint
+                  ? `A ${p.sub.toLowerCase()} printed to order on archival ${p.paper}. Each print is signed in pencil on the back and shipped flat in protective sleeves. Frame not included.`
+                  : `${p.sub}. Hand-illustrated and printed on FSC-certified ${p.paper}. Sturdy enough for little hands, beautiful enough to keep on the shelf.`}
             </p>
 
-            <div className="eyebrow" style={{ marginBottom: 12 }}>{isPrint ? 'Print size' : 'Format'}</div>
+            <div className="eyebrow" style={{ marginBottom: 12 }}>{isDigital ? 'Format' : isPrint ? 'Print size' : 'Format'}</div>
             <div className="option-grid">
               {p.sizes.map(s => (
                 <button key={s} className={`option ${size === s ? 'active' : ''}`} onClick={() => setSize(s)}>
                   <div className="option-name">{s}</div>
-                  <div className="option-meta">${sizePrice(s)}</div>
+                  <div className="option-meta">${fmt(sizePrice(s))}</div>
                 </button>
               ))}
             </div>
 
             <button className="btn btn-sage btn-block" onClick={handleAdd} disabled={adding}>
               {adding ? <><span className="spinner" style={{ borderTopColor: 'var(--paper)', borderColor: 'rgba(255,255,255,0.3)' }}></span> Adding…</> :
-                <>Add to cart — ${sizePrice(size)}</>}
+                <>{isDigital ? 'Buy & download' : 'Add to cart'} — ${fmt(sizePrice(size))}</>}
             </button>
 
             <ul className="spec-list">
               <li><dt>Format</dt><dd>{p.edition}</dd></li>
-              <li><dt>Paper</dt><dd>{p.paper}</dd></li>
+              <li><dt>{isDigital ? 'File' : 'Paper'}</dt><dd>{p.paper}</dd></li>
               <li><dt>Year</dt><dd>{p.year}</dd></li>
               <li><dt>Made in</dt><dd>Charlotte, NC</dd></li>
-              <li><dt>Shipping</dt><dd>{isPrint ? 'Flat in protective sleeve · 3–8 days' : 'Sturdy mailer · 3–8 days'}</dd></li>
+              <li><dt>{isDigital ? 'Delivery' : 'Shipping'}</dt><dd>{isDigital ? 'Instant download · emailed link' : isPrint ? 'Flat in protective sleeve · 3–8 days' : 'Sturdy mailer · 3–8 days'}</dd></li>
             </ul>
           </div>
         </section>
