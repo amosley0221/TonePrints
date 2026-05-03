@@ -189,7 +189,7 @@ function HomeStadium({ navigate, onQuickView }) {
             </div>
             <div className="cat-count">24 prints</div>
             <h3>Photo prints</h3>
-            <p>Open & limited editions</p>
+            <p>Instant digital downloads</p>
           </div>
           <div className="cat-card" onClick={() => navigate('shop')}>
             <div className="cat-icon">
@@ -237,7 +237,7 @@ function HomeStadium({ navigate, onQuickView }) {
           <div>
             <span className="eyebrow">Photo prints</span>
             <h3 style={{ marginTop: 14 }}>Made <em>just for you,</em> on archival paper.</h3>
-            <p>Every print is made to order on Hahnemühle photo rag and signed in pencil on the back. Open editions start at $32, limited editions at $58.</p>
+            <p>Travel and wildlife posters available as instant digital downloads — high-resolution PNG and print-ready PDF, ready to print at home or at your local print shop. Photos start at $10. Frame not included.</p>
             <button className="btn btn-sage" onClick={() => navigate('shop')}>
               Browse prints <span className="arrow">→</span>
             </button>
@@ -639,7 +639,7 @@ function AboutPage({ navigate }) {
           </div>
           <div>
             <span className="eyebrow">The process</span>
-            <p style={{ marginTop: 16 }}>Books are printed on FSC-certified paper, sewn and bound to last through many bedtimes. Photo prints are made to order on Hahnemühle archival paper, signed in pencil on the back.</p>
+            <p style={{ marginTop: 16 }}>Books are printed on FSC-certified paper, sewn and bound to last through many bedtimes. Photo prints are delivered as high-resolution digital downloads — print at home or at your local print shop, and frame in any size you love.</p>
             <p>If something arrives less than perfect, we'll replace it — or refund you, no questions asked.</p>
           </div>
         </section>
